@@ -1,0 +1,48 @@
+bootstrap.servers: 192.168.1.25:9092
+topic: test
+stats_interval_in_seconds: 2
+time_format: '%Y-%m-%dT%H:%M:%S'
+
+producer:
+  message_frequency_hz: 0.2
+
+consumer:
+  group.id: consumer_test_group
+  default.topic.config:
+    auto.offset.reset: latest
+  auto.commit.interval.ms: 500
+  poll.timeout: 0.01
+
+logging:
+  version: 1
+  formatters:
+    simple:
+      format: '%(asctime)s.%(msecs)03d | %(process)d | %(module)s | %(levelname)s | %(message)s'
+      datefmt: '%Y-%m-%dT%H:%M:%S'
+  handlers:
+    console:
+      class: logging.StreamHandler
+      level: DEBUG
+      formatter: simple
+      stream: ext://sys.stdout
+    consumer:
+      class: logging.handlers.TimedRotatingFileHandler
+      level: DEBUG
+      formatter: simple
+      when: h
+      filename: kafka-consumer.log
+    producer:
+      class: logging.handlers.TimedRotatingFileHandler
+      level: DEBUG
+      formatter: simple
+      when: h
+      filename: kafka-producer.log
+  loggers:
+    consumer:
+      level: DEBUG
+      handlers: [console, consumer]
+      propogate: yes
+    producer:
+      level: DEBUG
+      handlers: [console, producer]
+      propogate: yes
