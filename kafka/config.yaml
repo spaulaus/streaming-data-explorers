@@ -5,6 +5,7 @@ time_format: '%Y-%m-%dT%H:%M:%S'
 
 producer:
   message_frequency_hz: 0.2
+  num_messages: 10
 
 consumer:
   group.id: consumer_test_group
@@ -13,6 +14,7 @@ consumer:
   auto.commit.interval.ms: 500
   poll.timeout: 0.01
 
+#--------- DO NOT EDIT BELOW THIS LINE ------------
 logging:
   version: 1
   formatters:
@@ -30,13 +32,13 @@ logging:
       level: DEBUG
       formatter: simple
       when: h
-      filename: kafka-consumer.log
+      filename: logs/kafka-consumer.log
     producer:
       class: logging.handlers.TimedRotatingFileHandler
       level: DEBUG
       formatter: simple
       when: h
-      filename: kafka-producer.log
+      filename: logs/kafka-producer.log
   loggers:
     consumer:
       level: DEBUG
