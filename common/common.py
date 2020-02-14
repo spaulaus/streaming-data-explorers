@@ -33,4 +33,4 @@ def setup_logging(cfg):
     """
     if not exists(dirname(cfg['handlers']['consumer']['filename'])):
         mkdir(dirname(cfg['handlers']['consumer']['filename']))
-    dictConfig(cfg['logging'])
+    dictConfig(cfg)

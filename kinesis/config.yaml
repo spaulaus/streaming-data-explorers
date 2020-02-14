@@ -1,0 +1,59 @@
+profile: ps_kinesis_test
+arn: arn:aws:kinesis:us-east-1:616907985159:stream/test_stream
+stream: test_stream
+
+time_format: '%Y-%m-%dT%H:%M:%S'
+
+producer:
+  partition_key: '0'
+  message_frequency_hz: 0.2
+  num_messages: 10
+
+consumer:
+  # Should be one of
+  # AT_SEQUENCE_NUMBER - Start reading from the position denoted by a specific sequence number,
+  #                        provided in the value StartingSequenceNumber.
+  # AFTER_SEQUENCE_NUMBER - Start reading right after the position denoted by a specific sequence
+  #                         number, provided in the value StartingSequenceNumber.
+  # AT_TIMESTAMP - Start reading from the position denoted by a specific time stamp, provided in
+  #                the value Timestamp.
+  # TRIM_HORIZON - Start reading at the last untrimmed record in the shard in the system, which is
+  #                the oldest data record in the shard.
+  # LATEST - Start reading just after the most recent record in the shard, so that you always read
+  #          the most recent data in the shard.
+  shard_iterator_type: 'TRIM_HORIZON'
+
+#--------- DO NOT EDIT BELOW THIS LINE ------------
+logging:
+  version: 1
+  formatters:
+    simple:
+      format: '%(asctime)s.%(msecs)03d | %(process)d | %(module)s | %(levelname)s | %(message)s'
+      datefmt: '%Y-%m-%dT%H:%M:%S'
+  handlers:
+    console:
+      class: logging.StreamHandler
+      level: DEBUG
+      formatter: simple
+      stream: ext://sys.stdout
+    consumer:
+      class: logging.handlers.TimedRotatingFileHandler
+      level: DEBUG
+      formatter: simple
+      when: h
+      filename: logs/kafka-consumer.log
+    producer:
+      class: logging.handlers.TimedRotatingFileHandler
+      level: DEBUG
+      formatter: simple
+      when: h
+      filename: logs/kafka-producer.log
+  loggers:
+    consumer:
+      level: DEBUG
+      handlers: [console, consumer]
+      propogate: yes
+    producer:
+      level: DEBUG
+      handlers: [console, producer]
+      propogate: yes
